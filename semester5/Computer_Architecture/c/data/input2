@@ -1,0 +1,15 @@
+-machine(in bits)  32
+-total_cache_size(in KB) 1
+-num_cache_way 2
+-block_size(in bytes) 128
+
+R: 0x0018bc70
+R: 0x0018bc70
+R: 0x0018bc78
+R: 0x0005f110
+R: 0x0018bc78
+R: 0x0018bd10
+R: 0x0018bd18
+W: 0x00147490
+R: 0x0018bd18
+R: 0x0018bd18

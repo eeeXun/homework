@@ -1,0 +1,13 @@
+<table border=1>
+    {% for i in alist %}
+    <tr>
+        {% for j in alist %}
+        {% if (i+j)%2==0 %}
+        <td bgcolor="yellow">{{i}}*{{j}}={{i*j}}</td>
+        {% else %}
+        <td >{{i}}*{{j}}={{i*j}}</td>
+        {% endif %}
+        {% endfor %}
+    </tr>
+    {% endfor %}
+</table>

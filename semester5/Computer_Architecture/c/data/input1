@@ -1,0 +1,15 @@
+-machine(in bits)  64
+-total_cache_size(in KB) 2
+-num_cache_way 1
+-block_size(in bytes) 128
+
+R: 0x00000190
+R: 0x00000190
+R: 0x00000190
+R: 0x00094dc0
+R: 0x00000190
+R: 0x00000198
+R: 0x00000198
+R: 0x00000198
+W: 0x00094db8
+R: 0x00000198

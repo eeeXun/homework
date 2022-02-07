@@ -1,0 +1,71 @@
+
+  Deadline: 2021/Oct/25, 00:05
+
+  The exercise asks you to write a SIC program.
+  Note: SIC, not SIC/XE.
+
+  The program should be named as ``exer2.asm''. The program in other name will
+  be ignored.
+
+  The exercise reads 3 integers, a, n, m, and  return a^n mod m.
+  You shoulld preprare DEVF3 which contains 3 big-endian 3-byte-long integers.
+  And the output DEV06 should contains a big-endian 3-byte-long integer.
+  I have created a2i and i2a for converting from ascii to int and vice versa.
+
+  To run and test, you have to prepare DEV00, DEVF1, DEVF2, DEVF3.
+  The DEV00, DEVF1 are the ones copied from ../source, so you do not need 
+  to alter it. You only have to prepare DEVF2, DEVF3.
+
+    $ nano exer2.asm          # write the exer2.asm
+    $ ./run-asm exer2.asm     # assemble the program
+    $ more exer2.lst          # check the listing file
+                              #   if there are error messages, the exer2.obj
+                              #   is not usable.
+    $ cp exer2.obj DEVF2      # prepare the DEVF2, the object program
+    $ echo 4 10 17 | ./a2i > DEVF3   # prepare the DEVF3, the input data
+    $ ./sim                   # run simulator 
+    .......
+    $ ./i2a < DEV06           # check output
+    16
+    $ 
+
+  To make your program more readable, you have to write 3 functions:
+  mod, rdint, wdint, and use them to write your program. 
+  It maybe like the following.
+
+test     start   1000   
+first    stl     retadr
+         jsub    rdint         read a,n,m 
+         sta     na
+         jsub    rdint
+         sta     nn
+         jsub    rdint
+         sta     nm
+         .....
+         byte    x'FFFFFF'
+         ldl     retadr
+         rsub          
+na       resw    1
+nn       resw    1
+nm       resw    1
+.
+.   subroutine to get A % nm 
+.
+mod      . . . 
+         rsub
+. 
+.   subroutine to read 3-byte big-endian int into A
+. 
+rdint    . . . 
+         . . .
+         rsub
+input    byte    x'f3'
+. 
+.   subroutine to write 3-byte big-endian from A
+. 
+wdint    . . .
+         . . . 
+         rsub
+.
+output   byte    x'06'    
+         end     first

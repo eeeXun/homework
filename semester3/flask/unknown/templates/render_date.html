@@ -1,0 +1,8 @@
+<form action='/date' method="POST">
+    {{form.hidden_tag()}}
+    {{form.year.label}}{{form.year()}}
+    {{form.month.label}}{{form.month()}}
+    {{form.day.label}}{{form.day()}}
+    <br>
+    {{form.submit()}}
+</form>

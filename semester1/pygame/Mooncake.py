@@ -1,0 +1,7 @@
+print('要買幾個呢?')
+a=int(input('蛋黃酥($48元)'))
+b=int(input('素食綠豆凸 ($28)'))
+c=int(input('芋頭酥 ($40)'))
+d=int(input('鳳梨酥 ($30)'))
+e=int(input('小月餅 ($25)'))
+print(a*48+b*28+c*40+d*30+e*25)
