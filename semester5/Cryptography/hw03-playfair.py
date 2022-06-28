@@ -69,8 +69,8 @@ def process_result(message, shift):
             result += table[row_1][(col_1 + shift) % 5]
             result += table[row_2][(col_2 + shift) % 5]
         elif col_1 == col_2:
-            result += table[(row_1 + shift) %  5][col_1]
-            result += table[(row_2 + shift) %  5][col_2]
+            result += table[(row_1 + shift) % 5][col_1]
+            result += table[(row_2 + shift) % 5][col_2]
         else:
             result += table[row_1][col_2]
             result += table[row_2][col_1]
