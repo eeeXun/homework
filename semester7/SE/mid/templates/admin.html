@@ -1,0 +1,75 @@
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin</title>
+  <style>
+    td {
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+  <form action="/additem" method="post">
+    <label for="name">Name:</label><br />
+    <input type="text" id="name" name="name" /><br />
+    <label for="amount">Amount:</label><br />
+    <input type="number" id="amount" name="amount" /><br />
+    <button type="submit">Add</button>
+  </form>
+  <h2>All items</h2>
+  <table border="1">
+    <tr>
+      <th>item</th>
+      <th>amount</th>
+    </tr>
+    {% for item in items %}
+    <tr>
+      <form action="/updateitem" method="post">
+        <input type="hidden" name="id" value="{{ item[2] }}" />
+        <td>
+          <input type="text" id="name" name="name" value="{{ item[0] }}" />
+        </td>
+        <td>
+          <input type="number" id="amount" name="amount" value="{{ item[1] }}" />
+        </td>
+        <td>
+          <button type="submit">Update</button>
+        </td>
+      </form>
+      <form action="/deleteitem" method="post">
+        <td>
+          <button name="id" value="{{ item[2] }}">Delete</button>
+        </td>
+      </form>
+    </tr>
+    {% endfor %}
+  </table>
+  <h2>Users cart</h2>
+  <table border="1">
+    <tr>
+      <th>User Name</th>
+      <th>Item Name</th>
+      <th>Amount</th>
+    </tr>
+    {% for cart in carts %}
+    <tr>
+      <td>{{ cart[0] }}</td>
+      <td>{{ cart[1] }}</td>
+      <td>{{ cart[3] }}</td>
+      <form action="/deletecart" method="post">
+        <input type="hidden" name="id" value="{{ cart[2] }}" />
+        <input type="hidden" name="admin" value="1" />
+        <td>
+          <button type="submit">Delete</button>
+        </td>
+      </form>
+    </tr>
+    {% endfor %}
+  </table>
+</body>
+
+</html>

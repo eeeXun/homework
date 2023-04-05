@@ -1,0 +1,62 @@
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Question</title>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+    integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.2.0/socket.io.js"
+    integrity="sha512-WL6WGKMPBiM9PnHRYIn5YEtq0Z8XP4fkVb4qy7PP4vhmYQErJ/dySyXuFIMDf1eEYCXCrQrMJfkNwKc9gsjTjA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script type="text/javascript" charset="utf-8">
+    $(document).ready(function () {
+      var socket = io.connect();
+
+      $("#set").click(function () {
+        socket.emit("set", [$("#question").val(), $("#answer").val()]);
+        $("#question").val("");
+        $("#answer").val("");
+      });
+
+      $("#game_over").click(function () {
+        socket.emit("set", "game_over");
+        $("#question").val("");
+        $("#answer").val("");
+      });
+
+      socket.on("set_qa", function (data) {
+        $("#set_qa").html(data);
+      });
+
+      socket.on("set_box", function (data) {
+        $("#set_box").append(data);
+      });
+    });
+  </script>
+</head>
+
+<body>
+  <form>
+    <fieldset>
+      <legend>Q&A</legend>
+      <label for="question">Question:</label><br />
+      <input type="text" id="question" name="question" /><br />
+      <label for="answer">Answer:</label><br />
+      <input type="text" id="answer" name="answer" /><br />
+      <input type="button" id="set" value="set" />
+      <input type="button" id="game_over" value="game over" />
+    </fieldset>
+  </form>
+  <div id="set_qa"></div>
+  <fieldset>
+    <legend>Box</legend>
+    <div id="set_box"></div>
+  </fieldset>
+</body>
+
+</html>

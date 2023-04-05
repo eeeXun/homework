@@ -1,0 +1,77 @@
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Game</title>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+    integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.2.0/socket.io.js"
+    integrity="sha512-WL6WGKMPBiM9PnHRYIn5YEtq0Z8XP4fkVb4qy7PP4vhmYQErJ/dySyXuFIMDf1eEYCXCrQrMJfkNwKc9gsjTjA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script type="text/javascript" charset="utf-8">
+    $(document).ready(function () {
+      document.getElementById("answer_button").hidden = true;
+      var socket = io.connect();
+
+      $("#answer_button").click(function () {
+        socket.emit("press_answer", "");
+      });
+
+      $("#send_message").click(function () {
+        socket.emit("send_message", $("#message").val());
+        $("#message").val("");
+      });
+
+      socket.on("close_answer", function (data) {
+        document.getElementById("answer_button").hidden = true;
+        $("#who_is_answering").html("<h2>" + data + " is answering</h2>");
+      });
+
+      socket.on("open_answer", function (data) {
+        document.getElementById("answer_button").hidden = false;
+        $("#who_is_answering").html("<h2>" + "No one is answering</h2>");
+      });
+
+      socket.on("open_message", function (data) {
+        document.getElementById("message_form").hidden = false;
+      });
+
+      socket.on("close_message", function (data) {
+        document.getElementById("message_form").hidden = true;
+      });
+
+      socket.on("set_q", function (data) {
+        $("#set_qa").html(data);
+      });
+
+      socket.on("set_box", function (data) {
+        $("#set_box").append(data);
+      });
+    });
+  </script>
+</head>
+
+<body>
+  <h1>Hi {{username}}</h1>
+  <div id="set_qa"></div>
+  <button id="answer_button">Answer</button>
+  <h2 id="who_is_answering">No one is answering</h2>
+  <form id="message_form" hidden>
+    <fieldset>
+      <legend>Your answer</legend>
+      <input type="text" id="message" name="message" />
+      <input type="button" id="send_message" value="send message" />
+    </fieldset>
+  </form>
+  <fieldset>
+    <legend>Box</legend>
+    <div id="set_box"></div>
+  </fieldset>
+</body>
+
+</html>
