@@ -1,0 +1,55 @@
+#include <mpi.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+#ifndef N
+#define N 100
+#endif
+
+void init(int a[], int n)
+{
+    int i;
+    for (i = 0; i < n; ++i)
+        a[i] = rand() % N;
+}
+
+int cmpfunc(const void* a, const void* b) { return (*(int*)a - *(int*)b); }
+
+int main(int argc, char** argv)
+{
+    int rank, a[N], b[N / 2];
+
+    MPI_Init(&argc, &argv);
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+    if (rank == 0) {
+        init(a, N);
+        MPI_Send(&a[N / 2], N / 2, MPI_INT, 1, 0, MPI_COMM_WORLD);
+        qsort(a, N / 2, sizeof(int), cmpfunc);
+        MPI_Recv(b, N / 2, MPI_INT, 1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+
+        /* Serial: Merge array b and sorted part of array a */
+        int i = 0, j = 0;
+        while (i < N / 2 && j < N / 2) {
+            if (a[i] < b[j])
+                printf("%d ", a[i++]);
+            else
+                printf("%d ", b[j++]);
+        }
+        if (i == N / 2) {
+            for (; j < N / 2; ++j)
+                printf("%d ", b[j]);
+            printf("\n");
+        } else {
+            for (; i < N / 2; ++i)
+                printf("%d ", a[i]);
+            printf("\n");
+        }
+    } else if (rank == 1) {
+        MPI_Recv(b, N / 2, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+        qsort(b, N / 2, sizeof(int), cmpfunc);
+        MPI_Send(b, N / 2, MPI_INT, 0, 0, MPI_COMM_WORLD);
+    }
+
+    MPI_Finalize();
+    return 0;
+}
